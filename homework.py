@@ -95,8 +95,8 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: float = 1.38
-    const1_caloris: float = 1.1
-    const2_caloris: float = 2
+    CONST1_CALORIS: float = 1.1
+    CONST2_CALORIS: float = 2
 
     def __init__(self, action: int, duration: float,
                  weight: float, length_pool: float, count_pool: float):
@@ -117,8 +117,8 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        return ((self.get_mean_speed() + self.const1_caloris)
-                * self.const2_caloris * self.weight)
+        return ((self.get_mean_speed() + self.CONST1_CALORIS)
+                * self.CONST2_CALORIS * self.weight)
 
 
 def read_package(workout_type: str, data: list) -> Training:
