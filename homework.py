@@ -1,8 +1,10 @@
 class InfoMessage:
     """Информационное сообщение о тренировке."""
 
-    def __init__(self, training_type: str, duration: float,
-                 distance: float, speed: float, calories: float) -> None:
+    def __init__(
+            self, training_type: str, duration: float,
+            distance: float, speed: float, calories: float
+    ) -> None:
         self.training_type = training_type
         self.duration = duration
         self.distance = distance
@@ -22,6 +24,7 @@ class Training:
     """Базовый класс тренировки."""
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
+    MIN_IN_HOURS: int = 60
 
     def __init__(self,
                  action: int,
@@ -42,8 +45,7 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        return ((18 * self.get_mean_speed() - 20) * self.weight
-                / self.M_IN_KM * (self.duration * 60))
+        pass
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
@@ -56,19 +58,22 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
+    CONST1_CALORIS: int = 18
+    CONST2_CALORIS: int = 20
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        return ((18 * self.get_mean_speed() - 20)
+        return ((self.CONST1_CALORIS
+                * self.get_mean_speed()
+                - self.CONST2_CALORIS)
                 * self.weight / self.M_IN_KM
-                * (self.duration * 60))
+                * (self.duration * self.MIN_IN_HOURS))
 
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    const1_caloris: float = 0.035
-    const2_caloris: float = 0.029
-    MIN_IN_HOURS: int = 60
+    CONST1_CALORIS: float = 0.035
+    CONST2_CALORIS: float = 0.029
 
     def __init__(self,
                  action: int,
@@ -80,10 +85,10 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий от SportsWalking."""
-        return ((self.const1_caloris
+        return ((self.CONST1_CALORIS
                 * self.weight
                 + (self.get_mean_speed() ** 2 // self.height)
-                * self.const2_caloris * self.weight)
+                * self.CONST2_CALORIS * self.weight)
                 * (self.duration * self.MIN_IN_HOURS))
 
 
@@ -118,18 +123,18 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    if workout_type == 'SWM':
-        return Swimming(*data)
-    elif workout_type == 'RUN':
-        return Running(*data)
-    elif workout_type == 'WLK':
-        return SportsWalking(*data)
+    training_type: dict = {
+        'SWM': Swimming,
+        'RUN': Running,
+        'WLK': SportsWalking
+    }
+    if workout_type in training_type:
+        return training_type[workout_type](*data)
 
 
 def main(training: Training) -> None:
     """Главная функция."""
-    info: InfoMessage = training.show_training_info()
-    print(info.get_message())
+    print(training.show_training_info().get_message())
 
 
 if __name__ == '__main__':
