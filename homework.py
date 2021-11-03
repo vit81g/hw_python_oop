@@ -121,11 +121,7 @@ class Swimming(Training):
                 * self.CONST2_CALORIS * self.weight)
 
 
-training_type: dict = {
-        'SWM': Swimming,
-        'RUN': Running,
-        'WLK': SportsWalking
-}
+training_type: dict = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
 
 
 def read_package(workout_type: str, data: list) -> Training:
