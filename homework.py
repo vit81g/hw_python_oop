@@ -2,8 +2,8 @@ class InfoMessage:
     """Информационное сообщение о тренировке."""
 
     def __init__(
-            self, training_type: str, duration: float,
-            distance: float, speed: float, calories: float
+        self, training_type: str, duration: float,
+        distance: float, speed: float, calories: float
     ) -> None:
         self.training_type = training_type
         self.duration = duration
@@ -121,15 +121,19 @@ class Swimming(Training):
                 * self.CONST2_CALORIS * self.weight)
 
 
-def read_package(workout_type: str, data: list) -> Training:
-    """Прочитать данные полученные от датчиков."""
-    training_type: dict = {
+training_type: dict = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking
-    }
+}
+
+
+def read_package(workout_type: str, data: list) -> Training:
+    """Прочитать данные полученные от датчиков."""
     if workout_type in training_type:
         return training_type[workout_type](*data)
+    else:
+        raise KeyError('Unknown training code')
 
 
 def main(training: Training) -> None:
