@@ -129,7 +129,7 @@ def read_package(workout_type: str, data: list) -> Training:
     if workout_type in training_type:
         return training_type[workout_type](*data)
     else:
-        raise KeyError('Unknown training code')
+        print('Error data')
 
 
 def main(training: Training) -> None:
